@@ -478,7 +478,7 @@ function process_commands_query(query, mapKey, userid) {
                     val.text_Channel.send(ans.success);
                     const broadcast = discordClient.voice.createBroadcast();
                     broadcast.play(discordTTS.getVoiceStream(ans.success));
-                    const dispatcher = connection.play(broadcast);
+                    const dispatcher = val.voice_Connection.play(broadcast);
                   });
                 }).on('error', err => {
                   console.log('Error: ', err.message);
