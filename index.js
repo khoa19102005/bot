@@ -19,11 +19,6 @@ const util = require('util');
 const path = require('path');
 const request = require('request');
 const { Readable } = require('stream');
-const { TTSGuild, ExtendedClient } = require('./classes/extensions');
-Structures.extend('Guild', TTSGuild);
-
-const client = new ExtendedClient();
-client.registerCommands();
 
 //////////////////////////////////////////
 ///////////////// VARIA //////////////////
@@ -481,7 +476,7 @@ function process_commands_query(query, mapKey, userid) {
                     const ans = JSON.parse(Buffer.concat(data).toString());
                     console.log('text_Channel out: ' + ans.success)
                     const val = guildMap.get(mapKey);
-                    say.execute(ans.success)
+                    out = ans.success;
                   });
                 }).on('error', err => {
                   console.log('Error: ', err.message);
