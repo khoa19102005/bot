@@ -478,9 +478,6 @@ function process_commands_query(query, mapKey, userid) {
                     }).catch(function (error) {
                         console.error(error);
                     });
-                }).on('error', err => {
-                  console.log('Error: ', err.message);
-                });
         }
     }
     if (out != null && out.length) {
