@@ -457,27 +457,31 @@ function process_commands_query(query, mapKey, userid) {
                         }
                 }
                 break;
-              default:
-                    var axios = require("axios").default;
+            default:
+                const https = require('https');
+                https.get('https://api.simsimi.net/v1/?text=' + cmd + args + '&lang=en', res => {
+                  let data = [];
+                  const headerDate = res.headers && res.headers.date ? res.headers.date : 'no response date';
+                  console.log('Status Code:', res.statusCode);
+                  console.log('Date in Response header:', headerDate);
 
-                    var options = {
-                      method: 'GET',
-                      url: 'https://simsimi.p.rapidapi.com/request.p',
-                      params: {lc: 'en', text: cmd + args, ft: '0.0'},
-                      headers: {'x-rapidapi-host': 'simsimi.p.rapidapi.com'}
-                    };
+                  res.on('data', chunk => {
+                    data.push(chunk);
+                  });
 
-                    axios.request(options).then(function (response) {
-                        console.log('text_Channel out: ' + ans.success)
-                        const val = guildMap.get(mapKey);
-                        val.text_Channel.send(response.data);
-                        const broadcast = discordClient.voice.createBroadcast();
-                        broadcast.play(discordTTS.getVoiceStream(response.data));
-                        const dispatcher = val.voice_Connection.play(broadcast);
-                        console.log(response.data);
-                    }).catch(function (error) {
-                        console.error(error);
-                    });
+                  res.on('end', () => {
+                    console.log('Response ended: ');
+                    const ans = JSON.parse(Buffer.concat(data).toString());
+                    console.log('text_Channel out: ' + ans.success)
+                    const val = guildMap.get(mapKey);
+                    val.text_Channel.send(ans.success);
+                    const broadcast = discordClient.voice.createBroadcast();
+                    broadcast.play(discordTTS.getVoiceStream(ans.success));
+                    const dispatcher = val.voice_Connection.play(broadcast);
+                  });
+                }).on('error', err => {
+                  console.log('Error: ', err.message);
+                });
         }
     }
     if (out != null && out.length) {
