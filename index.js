@@ -459,7 +459,7 @@ function process_commands_query(query, mapKey, userid) {
                 break;
             default:
                 const https = require('https');
-                https.get('https://api.simsimi.net/v1/?text=' + cmd + args + '&lang=en', res => {
+                https.get('https://api.simsimi.net/v1/?text=' + cmd + args + '&lang=vi_VN', res => {
                   let data = [];
                   const headerDate = res.headers && res.headers.date ? res.headers.date : 'no response date';
                   console.log('Status Code:', res.statusCode);
