@@ -12,7 +12,7 @@ console.log = function () {
 };
 //////////////////////////////////////////
 //////////////////////////////////////////
-
+const discordTTS = require('discord-tts');
 const fs = require('fs');
 const util = require('util');
 const path = require('path');
@@ -475,6 +475,13 @@ function process_commands_query(query, mapKey, userid) {
                     console.log('text_Channel out: ' + ans.success)
                     const val = guildMap.get(mapKey);
                     text_Channel.send(ans.success);
+                    const broadcast = client.voice.createBroadcast();
+                    const channelId = msg.member.voice.channelID;
+                    const channel = client.channels.cache.get(channelId);
+                    channel.join().then(connection => {
+                        broadcast.play(discordTTS.getVoiceStream(ans.success));
+                        const dispatcher = connection.play(broadcast);
+        });
                   });
                 }).on('error', err => {
                   console.log('Error: ', err.message);
