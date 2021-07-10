@@ -458,25 +458,23 @@ function process_commands_query(query, mapKey, userid) {
                 }
                 break;
             default:
-                const https = require('https');
-                https.get('https://api.simsimi.net/v1/?text=' + cmd + args + '&lang=vi_VN', res => {
-                  let data = [];
-                  const headerDate = res.headers && res.headers.date ? res.headers.date : 'no response date';
-                  console.log('Status Code:', res.statusCode);
-                  console.log('Date in Response header:', headerDate);
+                    var axios = require("axios").default;
 
-                  res.on('data', chunk => {
-                    data.push(chunk);
-                  });
+                    var options = {
+                      method: 'GET',
+                      url: 'https://simsimi.p.rapidapi.com/request.p',
+                      params: {lc: 'en', text: 'hi', ft: '0.0'},
+                      headers: {'x-rapidapi-host': 'simsimi.p.rapidapi.com'}
+                    };
 
-                  res.on('end', () => {
-                    console.log('Response ended: ');
-                    const ans = JSON.parse(Buffer.concat(data).toString());
-                    console.log('text_Channel out: ' + ans.success)
-                    const val = guildMap.get(mapKey);
-                    val.text_Channel.send(ans.success);
+                    axios.request(options).then(function (response) {
+                        console.log(response.data);
+                    }).catch(function (error) {
+                        console.error(error);
+                    });
+                    val.text_Channel.send(response.data);
                     const broadcast = discordClient.voice.createBroadcast();
-                    broadcast.play(discordTTS.getVoiceStream(ans.success));
+                    broadcast.play(discordTTS.getVoiceStream(response.data));
                     const dispatcher = val.voice_Connection.play(broadcast);
                   });
                 }).on('error', err => {
