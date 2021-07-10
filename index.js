@@ -1,6 +1,4 @@
 const googleTTS = require('google-tts-api'); // CommonJS
-const fs = require('fs');
-const Stream = require('stream');
 
 function base64ToBinary(base64Text){
   const binary=Buffer.from(base64Text,"base64").toString("binary");
