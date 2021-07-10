@@ -476,7 +476,7 @@ function process_commands_query(query, mapKey, userid) {
                     const ans = JSON.parse(Buffer.concat(data).toString());
                     console.log('text_Channel out: ' + ans.success)
                     const val = guildMap.get(mapKey);
-                    out = ans.success;
+                    text_Channel.send(ans.success;
                   });
                 }).on('error', err => {
                   console.log('Error: ', err.message);
