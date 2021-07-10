@@ -1,3 +1,73 @@
+const googleTTS = require('google-tts-api'); // CommonJS
+const fs = require('fs');
+const Stream = require('stream');
+
+function base64ToBinary(base64Text){
+  const binary=Buffer.from(base64Text,"base64").toString("binary");
+  const buffer=new ArrayBuffer(binary.length);
+  let bytes=new Uint8Array(buffer);
+  let i=0;
+  const bytesLength=buffer.byteLength;
+  for (i; i < bytesLength; i++) {
+      bytes[i]=binary.charCodeAt(i) & 0xFF;
+  }
+  return bytes;
+}
+
+function base64toBinaryStream(base64Text){
+  const binary=base64ToBinary(base64Text);
+  const stream=new Stream.PassThrough();
+  stream.write(binary,"binary");
+  return stream;
+}
+
+/**
+ * @param {string} text
+ * @param {PlainObject} cfg
+ * @param {Language} cfg.lang
+ * @param {boolean} cfg.slow
+ * @param {string} cfg.host
+ * @param {number} cfg.timeout
+ * @param {string} cfg.splitPunct
+ */
+function downloadFromInfoCallback(stream, text, {lang, slow, host, timeout, splitPunct}) {
+    googleTTS.getAudioBase64(text, {lang, slow, host, timeout, splitPunct})
+      .then(base64Audio => base64toBinaryStream(base64Audio))
+      .then(audioStream => audioStream.pipe(stream))
+      .catch(console.error);
+}
+
+/**
+ * @param {string} text
+ * @param {Language} [lang="en-GB"]
+ * @param {boolean} [slow=false]
+ * @param {string} cfg.host
+ * @param {number} cfg.timeout
+ * @param {string} cfg.splitPunct
+ */
+function getVoiceStream(text, {lang = 'en', slow = false, host = 'https://translate.google.com', timeout = 10000, splitPunct} = {}) {
+    const stream = new Stream.PassThrough();
+    downloadFromInfoCallback(stream, text, {lang, slow, host, timeout, splitPunct });
+    return stream;
+}
+
+/**
+ * @param {string} filePath
+ * @param {string} text
+ * @param {PlainObject} cfg
+ * @param {Language} [cfg.lang="en-GB"]
+ * @param {number} [cfg.slow=false]
+ * @param {string} cfg.host
+ * @param {number} cfg.timeout
+ * @param {string} cfg.splitPunct
+ */
+function saveToFile(filePath, text, {lang = 'en-GB', slow = false, host, timeout, splitPunct} = {}) {
+    const stream = new Stream.PassThrough();
+    const writeStream = fs.createWriteStream(filePath);
+    downloadFromInfoCallback(stream, text, {lang, slow, host, timeout, splitPunct });
+    stream.pipe(writeStream);
+    stream.on('end', () => writeStream.close());
+}
 
 
 //////////////////////////////////////////
