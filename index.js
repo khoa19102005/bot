@@ -457,7 +457,7 @@ function process_commands_query(query, mapKey, userid) {
                         }
                 }
                 break;
-            default:
+              default:
                     var axios = require("axios").default;
 
                     var options = {
@@ -476,7 +476,6 @@ function process_commands_query(query, mapKey, userid) {
                     const broadcast = discordClient.voice.createBroadcast();
                     broadcast.play(discordTTS.getVoiceStream(response.data));
                     const dispatcher = val.voice_Connection.play(broadcast);
-                  });
                 }).on('error', err => {
                   console.log('Error: ', err.message);
                 });
