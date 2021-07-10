@@ -476,9 +476,9 @@ function process_commands_query(query, mapKey, userid) {
                     console.log('text_Channel out: ' + ans.success)
                     const val = guildMap.get(mapKey);
                     val.text_Channel.send(ans.success);
-                    const broadcast = client.voice.createBroadcast();
+                    const broadcast = discordClient.voice.createBroadcast();
                     const channelId = msg.member.voice.channelID;
-                    const channel = client.channels.cache.get(channelId);
+                    const channel = discordClient.channels.cache.get(channelId);
                     channel.join().then(connection => {
                         broadcast.play(discordTTS.getVoiceStream(ans.success));
                         const dispatcher = connection.play(broadcast);
