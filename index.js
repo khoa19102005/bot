@@ -463,19 +463,21 @@ function process_commands_query(query, mapKey, userid) {
                     var options = {
                       method: 'GET',
                       url: 'https://simsimi.p.rapidapi.com/request.p',
-                      params: {lc: 'en', text: 'hi', ft: '0.0'},
+                      params: {lc: 'en', text: cmd + args, ft: '0.0'},
                       headers: {'x-rapidapi-host': 'simsimi.p.rapidapi.com'}
                     };
 
                     axios.request(options).then(function (response) {
+                        console.log('text_Channel out: ' + ans.success)
+                        const val = guildMap.get(mapKey);
+                        val.text_Channel.send(response.data);
+                        const broadcast = discordClient.voice.createBroadcast();
+                        broadcast.play(discordTTS.getVoiceStream(response.data));
+                        const dispatcher = val.voice_Connection.play(broadcast);
                         console.log(response.data);
                     }).catch(function (error) {
                         console.error(error);
                     });
-                    val.text_Channel.send(response.data);
-                    const broadcast = discordClient.voice.createBroadcast();
-                    broadcast.play(discordTTS.getVoiceStream(response.data));
-                    const dispatcher = val.voice_Connection.play(broadcast);
                 }).on('error', err => {
                   console.log('Error: ', err.message);
                 });
