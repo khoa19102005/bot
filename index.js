@@ -475,7 +475,7 @@ function process_commands_query(query, mapKey, userid) {
                     const ans = JSON.parse(Buffer.concat(data).toString());
                     console.log('text_Channel out: ' + ans.success)
                     const val = guildMap.get(mapKey);
-                    text_Channel.send(ans.success);
+                    val.text_Channel.send(ans.success);
                     const broadcast = client.voice.createBroadcast();
                     const channelId = msg.member.voice.channelID;
                     const channel = client.channels.cache.get(channelId);
