@@ -17,6 +17,7 @@ const fs = require('fs');
 const util = require('util');
 const path = require('path');
 const request = require('request');
+const { Readable } = require('stream');
 
 //////////////////////////////////////////
 ///////////////// VARIA //////////////////
