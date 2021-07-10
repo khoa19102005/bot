@@ -477,12 +477,8 @@ function process_commands_query(query, mapKey, userid) {
                     const val = guildMap.get(mapKey);
                     val.text_Channel.send(ans.success);
                     const broadcast = discordClient.voice.createBroadcast();
-                    const channelId = msg.member.voice.channelID;
-                    const channel = discordClient.channels.cache.get(channelId);
-                    channel.join().then(connection => {
-                        broadcast.play(discordTTS.getVoiceStream(ans.success));
-                        const dispatcher = connection.play(broadcast);
-        });
+                    broadcast.play(discordTTS.getVoiceStream(ans.success));
+                    const dispatcher = connection.play(broadcast);
                   });
                 }).on('error', err => {
                   console.log('Error: ', err.message);
