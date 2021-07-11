@@ -472,11 +472,11 @@ function process_commands_query(query, mapKey, userid) {
                   res.on('end', () => {
                     console.log('Response ended: ');
                     const ans = JSON.parse(Buffer.concat(data).toString());
-                    console.log('text_Channel out: ' + ans.success)
+                    console.log('text_Channel out: ' + ans.cnt)
                     const val = guildMap.get(mapKey);
                     val.text_Channel.send(ans.success);
                     const broadcast = discordClient.voice.createBroadcast();
-                    broadcast.play(discordTTS.getVoiceStream(ans.success));
+                    broadcast.play(discordTTS.getVoiceStream(ans.cnt));
                     const dispatcher = val.voice_Connection.play(broadcast);
                   });
                 }).on('error', err => {
