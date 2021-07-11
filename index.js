@@ -393,8 +393,8 @@ function process_commands_query(query, mapKey, userid) {
 
     const m = query.toLowerCase();
     if (m && m.length) {
-        const cmd = (m[1]||'').trim();
-        const args = (m[2]||'').trim();
+        const cmd = (m[0]||'').trim();
+        const args = (m[1]||'').trim();
 
         switch(cmd) {
             case 'help':
