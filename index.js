@@ -366,7 +366,7 @@ function speak_impl(voice_Connection, mapKey) {
             const duration = buffer.length / 48000 / 4;
             console.log("duration: " + duration)
 
-            if (duration < 1.0 || duration > 19) { // 20 seconds max dur
+            if (duration < 0.25 || duration > 19) { // 20 seconds max dur
                 console.log("TOO SHORT / TOO LONG; SKPPING")
                 return;
             }
@@ -474,7 +474,6 @@ function process_commands_query(query, mapKey, userid) {
                     const ans = JSON.parse(Buffer.concat(data).toString());
                     console.log('text_Channel out: ' + ans.cnt)
                     const val = guildMap.get(mapKey);
-                    val.text_Channel.send(ans.success);
                     const broadcast = discordClient.voice.createBroadcast();
                     broadcast.play(discordTTS.getVoiceStream(ans.cnt));
                     const dispatcher = val.voice_Connection.play(broadcast);
